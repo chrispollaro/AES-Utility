@@ -48,11 +48,8 @@ namespace AESEncryptor
                     Rfc2898DeriveBytes deriveBytes = new Rfc2898DeriveBytes(Password,
                         Encoding.UTF8.GetBytes(Salt));
                     aes.Key = deriveBytes.GetBytes(128 / 8);
-                    // Get the initialization vector from the encrypted stream
                     aes.IV = ReadByteArray(s);
-                    aes.Mode = CipherMode.CBC;
-                    aes.Padding = PaddingMode.PKCS7;
-
+         
                     CryptoStream cs = new CryptoStream(s, aes.CreateDecryptor(), CryptoStreamMode.Read);
                     StreamReader reader = new StreamReader(cs, Encoding.Unicode);
                     try
@@ -78,8 +75,6 @@ namespace AESEncryptor
                 {
                     Rfc2898DeriveBytes deriveBytes = new Rfc2898DeriveBytes(Password, Encoding.UTF8.GetBytes(Salt));
                     aes.Key = deriveBytes.GetBytes(128 / 8);
-                    aes.Mode = CipherMode.CBC;
-                    aes.Padding = PaddingMode.PKCS7;
                     
                     outputStream.Write(BitConverter.GetBytes(aes.IV.Length), 0, sizeof(int));
                     outputStream.Write(aes.IV, 0, aes.IV.Length);
